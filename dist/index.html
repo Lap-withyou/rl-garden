@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f4ee"><meta name="description" content="跟着一台送包裹的小机器人，通过互动案例、可计算的公式和真实训练，从零理解强化学习。">
+  <title>学会下一步 — 强化学习互动指南</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%232f5948'/%3E%3Cpath d='M10 28V12h12v8h8' fill='none' stroke='%23faf6e8' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<aside class="sidebar">
+  <a href="#intro" class="brand" aria-label="学会下一步 首页"><span class="brand-icon">↗</span><span>学会下一步<small>THE REINFORCEMENT GUIDE</small></span></a>
+  <div class="side-intro">一个案例，一次看懂<br>强化学习。</div>
+  <nav aria-label="章节目录">
+    <a class="active" href="#intro"><span>00</span>从这里开始<i></i></a>
+    <a href="#story"><span>01</span>让机器人送个包裹<i></i></a>
+    <a href="#loop"><span>02</span>它到底在学什么<i></i></a>
+    <a href="#math"><span>03</span>把直觉写成公式<i></i></a>
+    <a href="#lab"><span>04</span>你的强化学习实验室<i></i></a>
+    <a href="#history"><span>05</span>从理论走向现实<i></i></a>
+    <a href="#takeaway"><span>06</span>带走一个新视角<i></i></a>
+  </nav>
+  <div class="side-bottom"><span class="status-dot"></span> 零基础友好 · 可交互学习<div class="progress-track"><div id="reading-progress"></div></div><span id="progress-label">准备出发</span><a class="sources-shortcut" href="#sources">资料与延伸阅读 ↗</a></div>
+</aside>
+<header class="mobile-header"><a href="#intro">↗ 学会下一步</a><button id="menu-toggle" aria-label="展开章节目录" aria-expanded="false">目录 ☰</button></header>
+<main id="main">
+  <section id="intro" class="hero chapter">
+    <div class="topline"><span>交互式学习手册 / VOL. 01</span><span>人工智能 · REINFORCEMENT LEARNING</span></div>
+    <div class="hero-grid"><div class="hero-copy"><div class="eyebrow"><span></span> 从一次小小的尝试开始</div><h1>没有人告诉它答案。<br>它却学会了<span class="green">下一步。</span></h1><p class="hero-desc">终点近在眼前，近路却走不通。<br>看机器人如何通过尝试，学会先绕远，再送达。</p><div class="hero-actions"><a class="button primary" href="#story">进入花园，开始探索 <span>↗</span></a><a class="text-link" href="#lab">直接体验训练 ↓</a></div><div class="hero-meta"><span>◷ 约 20 分钟</span><span>不需要编程基础</span><span>边读 · 边玩 · 边理解</span></div></div><div class="hero-art detour-art"><img src="assets/garden-hero-detour.png" alt="机器人与邮箱相距很近，中间被灌木和泥潭隔断，石板路绕一大圈才能相连" width="1200" height="800"><div class="art-caption"><span class="status-dot"></span> 每一次尝试，都让下一步更有方向。</div></div></div>
+    <div class="hero-bottom"><span class="small-label">你将理解</span><span>奖励与决策</span><span>四个核心公式</span><span>一个真正会学习的模型</span><span>近七十年的发展脉络</span><a href="#story" aria-label="继续向下阅读">↓</a></div>
+  </section>
+
+  <section id="story" class="chapter section">
+    <div class="section-heading"><span class="chapter-number">01 / THE MISSION</span><h2>只隔两格，<br>却要绕一整圈。</h2><p>起点和终点都在地图中央。看得见目的地，不代表能直接走过去。</p></div>
+    <div class="story-layout"><div class="story-copy"><h3>先来当一次机器人。</h3><p>机器人在第 6 行第 5 列，旗帜在同一行第 7 列，中间却是一格泥潭。连续的灌木把近路封住，必须绕过左侧、下方和右侧的隔断才能回来。</p><div class="reward-rules"><div><span class="rule-icon goal-icon">⚑</span><span>送达目的地<small>这一轮结束</small></span><strong class="green">+10</strong></div><div><span class="rule-icon">↗</span><span>正常移动<small>走路有一点点成本</small></span><strong>−0.2</strong></div><div><span class="rule-icon wall-icon">▦</span><span>撞到灌木或边界<small>留在原地</small></span><strong>−1</strong></div><div><span class="rule-icon hazard-icon">≈</span><span>掉进泥潭<small>这一轮结束</small></span><strong class="rust">−5</strong></div></div><div class="note"><span>想一想</span>向终点靠近一步，可能立刻掉进泥潭。暂时向反方向走，反而可能通向成功。这是“看起来更近”和“长期更好”的区别。</div></div>
+    <div class="play-card"><div class="card-top"><span><span class="status-dot"></span> 花园配送 · 亲自试一试</span><button id="manual-reset" class="subtle-button">↻ 重新出发</button></div><div class="route-facts"><span>直线距离 <strong>2 格</strong></span><i>≠</i><span>最短安全路线 <strong>26 步</strong></span></div><div class="drag-help" id="drag-help"><span aria-hidden="true">☝</span><span><strong>按住机器人，沿格子拖动</strong><br>手指、鼠标都可以；方向按钮也能用。</span></div><div class="play-area"><div id="manual-grid" class="garden-grid" role="group" aria-label="绕行花园，11行11列，按住机器人可拖动，也可用方向按钮或键盘" aria-describedby="drag-help"></div><div class="manual-panel"><div class="stat"><span>走过的步数</span><strong id="manual-steps">00</strong></div><div class="stat"><span>累计奖励</span><strong id="manual-reward">0.0</strong></div><div class="dpad" aria-label="移动机器人"><button data-move="0" aria-label="向上移动">↑</button><button data-move="3" aria-label="向左移动">←</button><span>●</span><button data-move="1" aria-label="向右移动">→</button><button data-move="2" aria-label="向下移动">↓</button></div><small>按住机器人拖动<br>也可点方向按钮，或聚焦地图后用键盘 ↑↓←→</small></div></div><div class="grid-legend"><span><i class="legend-square start"></i>出发点</span><span><i class="legend-square wall"></i>灌木</span><span><i class="legend-square hazard"></i>泥潭</span><span>⚑ 目的地</span></div><p id="manual-message" class="feedback" aria-live="polite">按住机器人向右拖一格，或点向右按钮，看看这条近路能不能走。</p></div></div>
+    <div class="big-idea"><span>刚刚，你经历了强化学习的最小单元。</span><p>不告诉它“正确动作”，<br>只让它知道<span>“这样做，结果怎么样”。</span></p></div>
+  </section>
+
+  <section id="loop" class="chapter section tinted">
+    <div class="section-heading"><span class="chapter-number">02 / THE LEARNING LOOP</span><h2>它学的，是一种做决定的方式。</h2><p>强化学习（RL）：智能体与环境交互，利用奖励反馈改善策略，追求更高的长期回报。</p></div>
+    <div class="loop-diagram" aria-label="智能体观察状态，执行动作，环境返回奖励和新状态"><div class="loop-node"><span class="node-icon">▣</span><strong>智能体 Agent</strong><small>送包裹的机器人</small></div><div class="loop-arrows"><div><span>动作 a<sub>t</sub> · 往哪走</span><i>→</i></div><div><i>←</i><span>奖励 r<sub>t+1</sub> + 新状态 s<sub>t+1</sub></span></div></div><div class="loop-node env-node"><span class="node-icon">✳</span><strong>环境 Environment</strong><small>花园与它的规则</small></div></div>
+    <div class="concepts"><button class="concept active" data-concept="state"><span>01</span><h3>状态 <i>s</i></h3><p>我现在在哪里？</p></button><button class="concept" data-concept="action"><span>02</span><h3>动作 <i>a</i></h3><p>我可以做什么？</p></button><button class="concept" data-concept="reward"><span>03</span><h3>奖励 <i>r</i></h3><p>这一步结果怎样？</p></button><button class="concept" data-concept="policy"><span>04</span><h3>策略 <i>π</i></h3><p>下次应该怎么选？</p></button></div>
+    <div id="concept-detail" class="concept-detail" aria-live="polite"></div>
+    <div class="compare-row"><div><span class="small-label">和监督学习的区别</span><h3>老师给答案，还是实践给反馈？</h3></div><p>监督学习常用“输入 + 正确标签”学习映射。本例通过行动收集经验：一次动作会改变后面的处境，反馈还可能很久才出现。强化学习也可以利用预先收集好的离线经验。这里的“学会”，是逐渐改善决策规则。</p></div>
+  </section>
+
+  <section id="math" class="chapter section">
+    <div class="section-heading"><span class="chapter-number">03 / THE MATH, MADE HUMAN</span><h2>四个公式，把“试出来”讲明白。</h2><p>不必先背符号。先看它在问什么，再把花园里的数字填进去。</p></div>
+    <div class="math-tabs" role="tablist" aria-label="公式主题"><button role="tab" id="tab-return" aria-controls="math-panel" aria-selected="true" data-math="return">01 长期回报</button><button role="tab" id="tab-value" aria-controls="math-panel" aria-selected="false" data-math="value" tabindex="-1">02 价值与 Bellman</button><button role="tab" id="tab-q" aria-controls="math-panel" aria-selected="false" data-math="q" tabindex="-1">03 Q-learning 更新</button><button role="tab" id="tab-explore" aria-controls="math-panel" aria-selected="false" data-math="explore" tabindex="-1">04 探索与利用</button></div>
+    <div id="math-panel" class="math-panel" role="tabpanel" aria-labelledby="tab-return" tabindex="0"></div>
+    <details class="deeper"><summary>再深入一点：这个小花园为什么能用 MDP 描述？ <span>＋</span></summary><div><p>一个马尔可夫决策过程（MDP）可写成 (S, A, P, R, γ)：状态集合、动作集合、转移规律、奖励规则和折扣因子。本例地图共有 121 格（灌木格不可进入），动作有 4 种，地图和规则固定。知道当前位置与动作，就能确定下一位置和奖励，不需要完整的过往路线，这就是本例的马尔可夫性。</p><p>现实中机器人可能只看见局部路面，此时位置观测未必包含所有决策信息，可能需要历史、状态估计或部分可观测模型。有限回合可以在 γ=1 时使用未折扣回报；无限时域通常使用 γ&lt;1 等条件来保证回报有定义。</p></div></details>
+    <p class="source-note">数学依据：<a href="https://mitpress.mit.edu/9780262039246/reinforcement-learning/" target="_blank" rel="noopener">Sutton & Barto《Reinforcement Learning: An Introduction》</a> · <a href="https://www.gatsby.ucl.ac.uk/~dayan/papers/cjch.pdf" target="_blank" rel="noopener">Watkins & Dayan, 1992</a>。教学数值为本案例设定。</p>
+  </section>
+
+  <section id="lab" class="chapter section dark-section">
+    <div class="section-heading"><span class="chapter-number">04 / YOUR LITTLE RL LAB</span><h2>现在，让它自己学。</h2><p>从一张全为零的 Q 表开始。一次出发到送达、掉坑或达到步数上限，算一个训练回合。每一步都更新评分，好的路线会逐渐浮现。</p></div>
+    <div class="lab-layout"><div class="lab-map-card"><div class="card-top"><span><span class="status-dot"></span> 绕路挑战 · Q-learning</span><label class="switch-label"><input type="checkbox" id="show-policy" checked> 显示策略</label></div><div id="lab-grid" class="garden-grid lab-grid" role="group" aria-label="训练花园，点击格子查看动作评分"></div><div class="lab-map-footer"><span>点击任意可走的格子，查看它的 Q 值</span><span>↑ 最优动作</span></div><div id="q-inspector" class="q-inspector"></div></div>
+    <div class="lab-controls"><div class="lab-stats"><div><span>已训练回合</span><strong id="episodes">0</strong></div><div><span>最近 50 回合送达率</span><strong id="success-rate">—</strong></div></div><div class="slider-group"><label for="epsilon">探索率 <i>ε</i><output id="epsilon-out">0.20</output></label><input id="epsilon" type="range" min="0" max="1" step="0.05" value="0.2"><p>越高，越常尝试随机动作。</p></div><div class="slider-group"><label for="alpha">学习率 <i>α</i><output id="alpha-out">0.20</output></label><input id="alpha" type="range" min="0.05" max="1" step="0.05" value="0.2"><p>越高，越快接受新经验，也可能越不稳定。</p></div><div class="slider-group"><label for="lab-gamma">折扣因子 <i>γ</i><output id="lab-gamma-out">0.90</output></label><input id="lab-gamma" type="range" min="0" max="0.99" step="0.01" value="0.9"><p>越高，越重视更远处的奖励。</p></div><div class="train-actions"><button class="button peach" id="train-btn">训练 500 回合 <span>↗</span></button><button class="button outline-light" id="watch-btn">▶ 看它送一单</button></div><button class="subtle-button light" id="reset-agent">↻ 清空经验，重新学习</button></div></div>
+    <div class="chart-card"><div class="chart-heading"><div><span class="small-label">LEARNING CURVE</span><h3>经验积累之后，表现有变化吗？</h3></div><span id="chart-meta">每 10 回合的平均累计奖励</span></div><svg id="learning-chart" viewBox="0 0 900 180" role="img" aria-label="训练回报曲线，尚未训练"></svg><div class="chart-bottom"><span id="chart-summary">还没有经验。点击“训练 500 回合”观察。</span><span>回合 →</span></div></div>
+    <p id="lab-feedback" class="lab-feedback" aria-live="polite">地图扩大到 11 × 11，每次训练 500 回合。观察它能否学会先远离终点，再绕行送达。所有计算都在你的浏览器中进行。</p><details class="lab-explanation"><summary>这份实验能说明什么？</summary><p>地图是确定的、完整可观测的；训练采用表格型 Q-learning，最多每回合 300 步，超时后重置位置并保留 Q 表，不把时间限制当作环境终点。曲线显示未折扣累计奖励，更新使用折扣因子 γ。送达率是训练时含随机探索的表现；“送一单”采用贪心策略，不探索。即使 Q 表学好了，训练时也可能因探索失败。固定随机种子便于重新比较，但不同参数会改变经验序列。</p><p>固定学习率和有限训练回合不构成收敛保证。改参数后旧 Q 表仍在；做公平比较时，请先清空经验。格子中的箭头仅表示当前 Q 值最高的动作，全零时不代表已经学会。此示例不使用神经网络。</p></details>
+  </section>
+
+  <section id="history" class="chapter section">
+    <div class="section-heading history-heading"><div><span class="chapter-number">05 / A BRIEF HISTORY</span><h2>从一张表，走向更大的世界。</h2></div><p>强化学习的发展不是一次跳跃。<br>它是理论、算力和训练方法的长期合流。</p></div>
+    <div id="history-filters" class="history-filters" role="group" aria-label="时间线筛选"><button class="active" data-era="all" aria-pressed="true">全部里程碑</button><button data-era="foundation" aria-pressed="false">理论奠基</button><button data-era="deep" aria-pressed="false">深度强化学习</button><button data-era="frontier" aria-pressed="false">走向新领域</button></div>
+    <div class="history-layout"><div id="timeline" class="timeline"></div><aside class="history-note"><span class="small-label">一条演进主线</span><p>从估计价值<br>到学习复杂策略<br>再到与人类反馈对齐。</p><div class="evolution"><span>表格与价值估计</span><i>↓</i><span>神经网络 + 大规模交互</span><i>↓</i><span>自我博弈与策略优化</span><i>↓</i><span>人类偏好与可验证奖励</span></div><small>这是帮助入门的线索，并非单一技术替代史。价值方法、策略方法、模型方法一直并行发展。</small></aside></div>
+    <p class="source-note">精选已核实里程碑，并非完整年表。时间线区分论文发表与系统演示；每个节点可展开查看成果、边界和原始来源。资料整理于 2026 年 10 月。</p>
+  </section>
+
+  <section id="takeaway" class="chapter section tinted">
+    <div class="section-heading"><span class="chapter-number">06 / TAKE IT WITH YOU</span><h2>你已经能用一句话解释它了。</h2></div><blockquote>强化学习，就是让一个决策者在环境里尝试，<br>依据奖励不断调整策略，<span>把眼前选择变成更好的长期结果。</span></blockquote>
+    <div class="takeaway-row"><div><span class="small-label">别忘记这三个边界</span><h3>奖励是设计出来的。<br>经验是有代价的。<br>学会一件事，不等于理解一切。</h3></div><p>奖励可能只是不完整的目标代理；设置失当会让系统“钻空子”。真实机器人试错有成本，所以需要仿真、安全约束和验证。一个游戏里的高分，也不能自动代表在所有环境里可靠。</p></div>
+    <div class="quiz-card"><div><span class="small-label">QUICK CHECK · 3 个小问题</span><h3 id="quiz-question"></h3></div><div id="quiz-options" class="quiz-options"></div><p id="quiz-feedback" aria-live="polite"></p><button id="quiz-next" class="text-link" hidden>下一题 →</button></div>
+    <div class="next-steps"><h3>如果你想继续走下去</h3><div><a href="https://mitpress.mit.edu/9780262039246/reinforcement-learning/" target="_blank" rel="noopener"><span>01 / 读经典</span><strong>Sutton & Barto 教科书 ↗</strong><small>从第 1–3 章开始，建立完整的概念框架。</small></a><a href="https://www.davidsilver.uk/teaching/" target="_blank" rel="noopener"><span>02 / 跟课程</span><strong>David Silver 强化学习课程 ↗</strong><small>逐步理解价值函数、动态规划和控制。</small></a><a href="#lab"><span>03 / 做实验</span><strong>回到你的花园实验室 ↑</strong><small>试试 γ=0，再观察它还会不会奔向远方。</small></a></div></div>
+  </section>
+  <footer id="sources"><a class="footer-brand" href="#intro">↗ 学会下一步</a><p>一个关于尝试、反馈与进步的互动手册。</p><div><span>内容依据原论文、研究机构资料及经典教材。<br>花园为教学模拟，插图由 AI 生成；不对应真实机器人性能。</span><a href="#intro">回到起点 ↑</a></div></footer>
+</main>
+<script type="module" src="app.js"></script>
+</body></html>

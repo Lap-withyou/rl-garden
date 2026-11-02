@@ -1,0 +1,17 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const root=path.dirname(fileURLToPath(import.meta.url));
+const dist=path.join(root,'dist');
+const history=JSON.parse(await fs.readFile(path.join(root,'research/history.json'),'utf8'));
+await fs.writeFile(path.join(dist,'history.js'),`export const history = ${JSON.stringify(history)};\n`);
+const [html,css,engine,drag,app,img]=await Promise.all(['index.html','style.css','engine.js','drag-control.js','app.js','assets/garden-hero-detour.png'].map(p=>fs.readFile(path.join(dist,p))));
+const removeImports=source=>source.replace(/^import[\s\S]*?from\s*['"][^'"]+['"];?\r?\n/gm,'');
+const dragBundle='\nconst { attachRobotDrag } = (()=>{\n'+removeImports(drag.toString()).replace(/^export /gm,'')+'\nreturn { attachRobotDrag };\n})();\n';
+const js=engine.toString().replace(/^export /gm,'')+'\nconst history = '+JSON.stringify(history)+';\n'+dragBundle+removeImports(app.toString());
+const standalone=html.toString().replace('<link rel="stylesheet" href="style.css">',()=>'<style>'+css.toString()+'</style>').replace('src="assets/garden-hero-detour.png"','src="data:image/png;base64,'+img.toString('base64')+'"').replace('<script type="module" src="app.js"></script>',()=>'<script>\n(()=>{\n'+js.replace(/<\/script/gi,'<\\/script')+'\n})();\n</script>');
+const output=path.join(root,'学会下一步_强化学习互动指南.html');
+await fs.writeFile(output,standalone);
+await fs.writeFile(path.join(root,'学会下一步_绕行挑战版.html'),standalone);
+await fs.writeFile(path.join(root,'学会下一步_触控互动版.html'),standalone);
+console.log(`Built ${history.length} verified history entries and standalone HTML (${Math.round(Buffer.byteLength(standalone)/1024)} KB)`);
